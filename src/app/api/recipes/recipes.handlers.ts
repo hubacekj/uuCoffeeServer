@@ -2,7 +2,8 @@ import { Response, Request, NextFunction } from 'express';
 import { eq } from 'drizzle-orm';
 
 import { ParamWithId } from '../../../types';
-import { InsertRecipeType, Recipe, UpdateRecipeType, recipeIngredients, recipes } from '../../../db/schema';
+import { recipeIngredients, recipes } from '../../../db/schema'
+import { InsertRecipeType, Recipe, UpdateRecipeType } from './recipes.models';
 import { db } from '../../../db';
 
 import { filterAsync } from '../../../utilities/asyncFilter';

@@ -2,7 +2,8 @@ import { Response, Request, NextFunction } from 'express';
 import { eq } from 'drizzle-orm';
 
 import { ParamWithId } from '../../../types';
-import { InsertIngredientType, UpdateIngredientType, Ingredient, ingredients, recipeIngredients } from '../../../db/schema';
+import { InsertIngredientType, UpdateIngredientType, Ingredient } from './ingredients.models'
+import { ingredients, recipeIngredients } from '../../../db/schema';
 import { db } from '../../../db';
 
 export async function findAll(_: Request, res: Response<Ingredient[]>, next: NextFunction) {
