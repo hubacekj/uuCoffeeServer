@@ -2,7 +2,7 @@ FROM oven/bun:1
 
 WORKDIR /workspace
 
-COPY package.json bun.lockb .
+COPY package.json bun.lockb ./
 
 RUN bun install --production --frozen-lockfile
 
