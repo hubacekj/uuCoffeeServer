@@ -1,0 +1,31 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: docker/db/Dockerfile
+      args:
+        DATABASE_LOCATION: ${DATABASE_LOCATION}
+        DATABASE_FILENAME: ${DATABASE_FILENAME}
+    volumes:
+      - uucoffeevolume:/workspace/${DATABASE_LOCATION}
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/migrate/Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - uucoffeevolume:/workspace/${DATABASE_LOCATION}
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    ports:
+      - ${CONTAINER_PORT}:${APP_PORT-8080}
+    depends_on:
+      - db
+      - migrate
+    volumes:
+      - uucoffeevolume:/workspace/${DATABASE_LOCATION}
+volumes:
+  uucoffeevolume:
