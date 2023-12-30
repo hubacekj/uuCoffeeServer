@@ -1,0 +1,68 @@
+{
+  "extends" : [
+    "airbnb",
+    "airbnb/hooks",
+    "airbnb-typescript",
+    "plugin:promise/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:typescript-sort-keys/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "drizzle"
+  ],
+  "rules": {
+    "import/no-cycle": ["warn"],
+    "import/prefer-default-export": "off",
+    "react/default-props-match-prop-types": "off",
+    "no-console": ["error"],
+    "@typescript-eslint/object-curly-spacing": ["error"],
+    "@typescript-eslint/no-explicit-any": ["warn"],
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/consistent-type-exports": ["error"],
+    "@typescript-eslint/consistent-type-imports": ["error"],
+    "@typescript-eslint/indent": "off",
+    "@typescript-eslint/no-misused-promises": ["error", {
+      "checksVoidReturn": {
+        "arguments": false
+      }
+    }],
+    "brace-style": ["error", "1tbs", {
+      "allowSingleLine": false
+    }],
+    "curly": ["error", "all"],
+    "import/order": ["error", {
+      "groups": ["builtin", "external", "internal", "parent", "sibling", "index"]
+    }],
+    "jsx-a11y/label-has-associated-control": ["error", {
+      "labelComponents": [],
+      "labelAttributes": [],
+      "controlComponents": [],
+      "assert": "either",
+      "depth": 25
+    }],
+    "max-len": ["error", {
+      "code": 120,
+      "ignoreTrailingComments": true,
+      "ignoreUrls": true,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true,
+      "ignoreRegExpLiterals": true
+    }],
+    "object-curly-newline": ["error", {
+      "multiline": true,
+      "minProperties": 2,
+      "consistent": true
+    }],
+    "object-curly-spacing": ["error", "always"],
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+    "no-undef-init": ["error"],
+    "promise/catch-or-return": ["off"],
+    "promise/no-nesting": ["off"]
+  }
+}

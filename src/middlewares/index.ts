@@ -1,7 +1,14 @@
-import { Response, Request, NextFunction } from 'express';
+import type {
+  Response,
+  Request,
+  NextFunction,
+} from 'express';
 import { ZodError } from 'zod';
 
-import { ErrorResponse, RequestValidators } from '../types/index';
+import type {
+  ErrorResponse,
+  RequestValidators,
+} from '../types/index';
 
 export function validateRequest(validators: RequestValidators) {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -33,11 +40,11 @@ export const notFound = (req: Request, res: Response, next: NextFunction) => {
   next(error);
 };
 
-export const errorHandler = (err: ErrorResponse, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (err: ErrorResponse, req: Request, res: Response) => {
   const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
   res.status(statusCode);
   res.json({
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
   });
-}
+};

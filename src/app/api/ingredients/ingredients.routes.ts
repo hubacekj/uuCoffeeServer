@@ -2,8 +2,12 @@ import { Router } from 'express';
 import { ParamsWithId } from '../../../types';
 
 import { validateRequest } from '../../../middlewares';
-import { findAll, findOne, createOne, updateOne, deleteOne } from './ingredients.handlers';
-import { InsertIngredientSchema, UpdateIngredientSchema } from './ingredients.models';
+import {
+  findAll, findOne, createOne, updateOne, deleteOne,
+} from './ingredients.handlers';
+import {
+  InsertIngredientSchema, UpdateIngredientSchema,
+} from './ingredients.models';
 
 const ingredientsRouter = Router();
 
