@@ -36,15 +36,27 @@ export function validateRequest(validators: RequestValidators) {
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
   res.status(404);
-  const error = new Error(`🔍 - Not Found - ${req.originalUrl}`);
-  next(error);
+  next(new Error(`🔍 - Not Found - ${req.originalUrl}`));
 };
 
-export const errorHandler = (err: ErrorResponse, req: Request, res: Response) => {
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+// eslint-disable-next-line
+export const errorHandler = (err: Error, req: Request, res: Response<ErrorResponse>, next: NextFunction) => {
+  const statusCode = res.statusCode || 500;
+
   res.status(statusCode);
+
+  if (err instanceof ZodError) {
+    res.json({
+      error: {
+        message: err.issues.map((issue) => issue.message).join(' '),
+      },
+    });
+  }
+
   res.json({
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
+    error: {
+      message: err.message,
+      stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
+    },
   });
 };

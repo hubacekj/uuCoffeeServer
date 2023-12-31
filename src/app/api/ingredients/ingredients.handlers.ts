@@ -45,18 +45,23 @@ export async function createOne(
   next: NextFunction,
 ) {
   try {
-    const updatedIngredients = await db.insert(ingredients).values({ ...req.body }).returning();
+    const { name } = req.body;
 
-    const lastIngredientId = updatedIngredients[updatedIngredients.length - 1]?.id;
+    const [ingredientWithName] = await db.select().from(ingredients).where(eq(ingredients.name, name));
 
-    if (!lastIngredientId) {
-      res.status(404);
-      throw new Error('Unable to insert.');
+    if (ingredientWithName) {
+      throw new Error(`Ingredient with name "${name}" already exists.`);
     }
 
-    const insertedIngredient = await db.query.ingredients.findFirst({
-      where: eq(ingredients.id, lastIngredientId),
-    });
+    const [insertedIngredient] = await db
+      .insert(ingredients)
+      .values({ ...req.body })
+      .returning();
+
+    if (!insertedIngredient) {
+      res.status(404);
+      throw new Error('Unable to create ingredient.');
+    }
 
     res.json(insertedIngredient);
   } catch (error) {
@@ -72,9 +77,7 @@ export async function findOne(
   try {
     const paramId = Number(req.params.id);
 
-    const result = await db.query.ingredients.findFirst({
-      where: eq(ingredients.id, paramId),
-    });
+    const [result] = await db.select().from(ingredients).where(eq(ingredients.id, paramId));
 
     if (!result) {
       res.status(404);
@@ -95,20 +98,26 @@ export async function updateOne(
   try {
     const paramId = Number(req.params.id);
 
-    const ingredientToBeUpdated = await db.query.ingredients.findFirst({
-      where: eq(ingredients.id, paramId),
-    });
+    const [ingredientToBeUpdated] = await db.select().from(ingredients).where(eq(ingredients.id, paramId));
 
     if (!ingredientToBeUpdated) {
       res.status(404);
       throw new Error(`Ingredient with id "${paramId}" not found.`);
     }
 
-    await db.update(ingredients).set({ ...req.body }).where(eq(ingredients.id, paramId));
+    if (req.body.name) {
+      const [ingredientWithName] = await db.select().from(ingredients).where(eq(ingredients.name, req.body.name));
 
-    const updatedIngredient = await db.query.ingredients.findFirst({
-      where: eq(ingredients.id, paramId),
-    });
+      if (ingredientWithName && ingredientWithName.id !== paramId) {
+        throw new Error(`Unable to update ingredient with name "${req.body.name}" that already exists.`);
+      }
+    }
+
+    const [updatedIngredient] = await db
+      .update(ingredients)
+      .set({ ...req.body })
+      .where(eq(ingredients.id, paramId))
+      .returning();
 
     res.json(updatedIngredient);
   } catch (error) {
@@ -124,9 +133,7 @@ export async function deleteOne(
   try {
     const paramId = Number(req.params.id);
 
-    const toBeDeletedIngredient = await db.query.ingredients.findFirst({
-      where: eq(ingredients.id, paramId),
-    });
+    const [toBeDeletedIngredient] = await db.select().from(ingredients).where(eq(ingredients.id, paramId));
 
     if (!toBeDeletedIngredient) {
       res.status(404);

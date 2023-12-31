@@ -14,15 +14,17 @@ export type MessageResponse = {
   message: string
 };
 
-export type ErrorResponse = MessageResponse & {
-  stack?: string
+export type ErrorResponse = {
+  error: MessageResponse & {
+    stack?: string
+  }
 };
 
 export const ParamsWithId = z.object({
   id: z.string().min(1).refine((val) => (
     !Number.isNaN(Number(val))
   ), {
-    message: 'Invalid id',
+    message: 'Id parameter must be a number.',
   }),
 });
 
