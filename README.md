@@ -79,3 +79,40 @@ Backend API documentation for the uuCoffee application.
 | portionAmount   | number                                   | true     |               | in mililiters                           |
 | preparationTime | number                                   | true     |               | in minutes                              |
 | ingredients     | {ingredientId: number, amount: number}[] | false    |               | foreign key, amount in ingredient units |
+
+---
+
+## Local development guide
+
+:warning: Bun is not yet supported on Windows, please use WSL, Linux or MacOS
+
+1. [install bun](https://bun.sh/docs/installation)
+2. install dependencies
+
+```bash
+bun i
+```
+
+3. add `.env` file to the root of the project by the .env.dist template
+
+```bash
+cp .env.dist .env
+```
+
+4. create a new empty db file in `/data/db` named `uucoffeedb.db` (you can use VS code explorer instead of bash)
+
+```bash
+sudo mkdir -p /data/db && sudo touch /data/db/uucoffeedb.db
+```
+
+5. run db migration
+
+```bash
+bun run drizzle:migrate
+```
+
+6. run the server locally
+
+```bash
+bun run dev
+```
